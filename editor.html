@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://*.jam.dev; connect-src 'self' https://*.jam.dev wss://echo.websocket.org; worker-src 'self' blob: https://*.jam.dev; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:" />
+  <title>Jam spike – SDK + CSP editora</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <h1>RIA editor – simulácia (SDK + CSP editora)</h1>
+  <p class="sub">Jam spike. Stránka simuluje editor vložený v Nextcloude.</p>
+  <div id="context"></div>
+  <div class="row">
+    <button id="report" class="primary">Nahlásiť chybu</button>
+  </div>
+  <div class="doc">
+    <strong>§ 1 Predmet úpravy</strong>
+    <label>(1) Text odseku (napíš sem niečo počas nahrávania)
+      <input type="text" value="Tento zákon upravuje …" />
+    </label>
+    <label>Heslo (auto-blur test)
+      <input type="password" value="tajne-heslo" />
+    </label>
+  </div>
+  <div class="row">
+    <button data-action="console">console.log/warn/error</button>
+    <button data-action="fetch-ok">fetch data.json</button>
+    <button data-action="fetch-api">fetch api/secret.json</button>
+    <button data-action="fetch-404">fetch 404</button>
+    <button data-action="ws">WebSocket s ?token=</button>
+    <button data-action="throw">nezachytená výnimka</button>
+  </div>
+  <ul id="log"></ul>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

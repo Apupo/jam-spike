@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jam spike – Nextcloud host</title>
+  <style>
+    :root { color-scheme: light dark; --bg: #f3f4f7; --bar: #0b5cad; --fg: #1b1b1f; --line: #d6d7de; }
+    @media (prefers-color-scheme: dark) { :root { --bg: #101014; --bar: #0a3f78; --fg: #ececf1; --line: #2c2c33; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px/1.5 system-ui, sans-serif; background: var(--bg); color: var(--fg); height: 100vh; display: flex; flex-direction: column; }
+    header { background: var(--bar); color: #fff; padding: 8px 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    header strong { margin-right: auto; }
+    header label { display: flex; gap: 4px; align-items: center; }
+    header select, header button { font: inherit; }
+    main { flex: 1; display: flex; min-height: 0; }
+    nav { width: 200px; padding: 16px; border-right: 1px solid var(--line); }
+    #frame-wrap { flex: 1; min-width: 0; }
+    iframe { width: 100%; height: 100%; border: 0; display: block; background: #fff; }
+    code { font-size: 12px; }
+  </style>
+</head>
+<body>
+  <!--
+    Simulácia Nextcloudu: vkladá editor ako cross-origin iframe rovnako ako
+    ria_vfs/src/fileAction.js (riaBuildEditorOverlay). Spúšťa sa lokálne
+    (http://localhost:8787/host.html), nie z GitHub Pages, aby bol iframe cross-origin.
+  -->
+  <header>
+    <strong>Nextcloud (simulácia host stránky)</strong>
+    <label>Editor
+      <select id="variant">
+        <option value="editor.html">SDK + CSP editora</option>
+        <option value="editor-nocsp.html">SDK bez CSP</option>
+        <option value="editor-tags.html">statické tagy</option>
+      </select>
+    </label>
+    <label><input type="checkbox" id="allow" checked /> <code>allow="display-capture; microphone"</code></label>
+    <button id="reload">Načítať iframe</button>
+  </header>
+  <main>
+    <nav>
+      <p>Súbory</p>
+      <p>📄 Návrh zákona (spike-doc-1)</p>
+      <p><small>Logy tejto stránky Jam zachytávať nemá.</small></p>
+    </nav>
+    <div id="frame-wrap"></div>
+  </main>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const EDITOR_BASE = params.get("editor") || "https://apupo.github.io/jam-spike/";
+    const editorOrigin = new URL(EDITOR_BASE).origin;
+
+    // Variant s odkazom: jam-* parametre z URL hostu sa prepošlú do iframe.
+    function jamParams() {
+      const out = new URLSearchParams();
+      for (const [k, v] of params) if (k.startsWith("jam-")) out.set(k, v);
+      return out;
+    }
+
+    function load() {
+      const wrap = document.getElementById("frame-wrap");
+      wrap.replaceChildren();
+      const iframe = document.createElement("iframe");
+      if (document.getElementById("allow").checked) {
+        iframe.allow = "display-capture; microphone; clipboard-write";
+      }
+      const src = new URL(document.getElementById("variant").value, EDITOR_BASE);
+      src.searchParams.set("lang", "sk");
+      for (const [k, v] of jamParams()) src.searchParams.set(k, v);
+      iframe.src = src.href;
+      iframe.addEventListener("load", () => {
+        iframe.contentWindow.postMessage({ type: "ria-token", token: "host-jwt-simulacia" }, editorOrigin);
+      });
+      wrap.appendChild(iframe);
+      console.log("[host] iframe", iframe.src, "allow=", iframe.allow || "(žiadny)");
+    }
+
+    document.getElementById("reload").addEventListener("click", load);
+    setInterval(() => console.log("[host] heartbeat hostu – nemá byť v Jame"), 5000);
+    load();
+  </script>
+</body>
+</html>
