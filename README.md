@@ -39,7 +39,7 @@ treba to zopakovať na dvoch subdoménach `alistiq.com`.
 | T2 | Recording Link bez iframe | otvoriť Recording Link z Jamu (mal by smerovať na overenú stránku s `?jam-recording=`) | recorder sa otvorí, nahrávka obsahuje logy |
 | T3 | Recorder v iframe, Chrome | host.html, `allow` zapnuté, „SDK + CSP editora" → Nahlásiť chybu → zdieľať kartu „Nextcloud host" + mikrofón → klikať tlačidlá aktivity → nahovoriť pár viet → odoslať | nahrávka s videom, hlasom a logmi editora |
 | T4 | Recorder v iframe bez `allow` | ako T3, `allow` vypnuté → Načítať iframe | očakávame, že zdieľanie obrazovky zlyhá |
-| T5 | Variant s odkazom | http://localhost:8787/host.html?jam-recording=ID&jam-mic-enabled=enabled&jam-reference=spike-doc-1 | recorder sa v iframe otvorí sám |
+| T5 | Variant s odkazom | http://localhost:8787/host.html?jam-recording=ehZhhj3&jam-mic-enabled=enabled&jam-reference=spike-doc-1 | recorder sa v iframe otvorí sám |
 | T6 | Safari | zopakovať T3 v Safari | ako T3 |
 | T7 | CSP | pri T3 sledovať panel logov v editore (červené riadky „CSP blokuje…"), porovnať s „SDK bez CSP" | žiadne CSP blokovanie, inak zapísať hosty |
 | T8 | Dve karty (záložný variant) | len ak T3 zlyhá: Recording Link v karte 1, host.html v karte 2, pracovať v karte 2 | v teste pravdepodobne zlyhá kvôli rôznym sites, nie je smerodajné |
