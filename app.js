@@ -38,21 +38,21 @@ if (!JAM_TEAM_ID) {
   }
 }
 
-reportBtn.addEventListener("click", async () => {
+// Možnosť B z návrhu: recorder sa otvára v novej karte na doméne editora,
+// tester pracuje ďalej v karte s Nextcloudom (capture v iframe sa zapne sám).
+reportBtn.addEventListener("click", () => {
   if (!JAM_RECORDING_ID) {
     show("JAM_RECORDING_ID v config.js nie je vyplnené", "warn");
     return;
   }
-  try {
-    const recorder = await jam.loadRecorder();
-    recorder.open(JAM_RECORDING_ID, {
-      jamParams: {
-        "jam-mic-enabled": "enabled",
-        "jam-reference": DOC_ID,
-      },
-    });
-    show("Recorder otvorený cez tlačidlo", "ok");
-  } catch (e) {
-    show(`Recorder sa neotvoril: ${e.message}`, "error");
-  }
+  const url = new URL("./editor.html", location.href);
+  url.searchParams.set("jam-recording", JAM_RECORDING_ID);
+  const ua = navigator.userAgent;
+  const browser = /Edg\//.test(ua) ? "Edge" : /Firefox\//.test(ua) ? "Firefox"
+    : /Chrome\//.test(ua) ? "Chrome" : /Safari\//.test(ua) ? "Safari" : "?";
+  url.searchParams.set("jam-title", `Nahlásenie z tlačidla (${browser})`);
+  url.searchParams.set("jam-reference", DOC_ID);
+  url.searchParams.set("jam-mic-enabled", "enabled");
+  window.open(url, "_blank", "noopener");
+  show("Recorder otvorený v novej karte", "ok");
 });
