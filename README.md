@@ -30,6 +30,17 @@ treba to zopakovať na dvoch subdoménach `alistiq.com`.
 4. Lokálne spustiť host: `python3 -m http.server 8787 --bind 127.0.0.1`
    v priečinku repozitára, otvoriť http://localhost:8787/host.html.
 
+### Windows bez Gitu, Pythonu a Node
+
+1. Stiahnuť ZIP: https://github.com/Apupo/jam-spike/archive/refs/heads/main.zip
+   a rozbaliť.
+2. Dvakrát kliknúť na `start.cmd`. Spustí dva servery v PowerShelli
+   (`serve.ps1`, porty 8787 a 8788, bez cache) a otvorí
+   `http://localhost:8787/host.html?editor=http://localhost:8788/`.
+3. „Načítať iframe" → v editore „Nahlásiť chybu" → recorder v novej karte →
+   zdieľať okno alebo obrazovku → pracovať v karte s hostom.
+4. Servery sa zastavia zatvorením ich okien.
+
 ## Testy
 
 | # | Test | Postup | Očakávanie |
